@@ -1,34 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Ruangan</title>
-    <style>body { font-family: Arial; margin: 40px; } table { width: 50%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }</style>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        .page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #1f2937;
+        }
+        .nav-links a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .nav-primary { background-color: #f3f4f6; color: #374151; }
+        .nav-primary:hover { background-color: #e5e7eb; }
+        .nav-danger { color: #dc2626; background-color: #fee2e2; }
+        .nav-danger:hover { background-color: #fecaca; }
+
+        .add-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .add-form input {
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            flex: 1;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .add-form input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary { background-color: #3b82f6; color: white; }
+        .btn-primary:hover { background-color: #2563eb; }
+        
+        .btn-danger { background-color: #ef4444; color: white; padding: 6px 12px; font-size: 12px;}
+        .btn-danger:hover { background-color: #dc2626; }
+        
+        .btn-outline {
+            text-decoration: none;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-outline:hover { background-color: #f3f4f6; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #4b5563;
+        }
+        tr:hover { background-color: #f9fafb; }
+        .action-cell {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .action-cell form { margin: 0; }
+    </style>
 </head>
 <body>
-    <h1>Manajemen Ruangan</h1>
-    <a href="/bookings">Ke Halaman Pemesanan</a> | 
-    <a href="/login/logout" style="color: red;">Logout</a> <br><br>
-    <form action="/rooms" method="POST">
-        <input type="text" name="name" placeholder="Nama Ruangan" required />
-        <input type="number" name="capacity" placeholder="Kapasitas" required />
-        <button type="submit">Tambah Ruangan</button>
-    </form>
-    <br>
-    <table>
-        <tr><th>ID</th><th>Nama Ruangan</th><th>Kapasitas</th><th>Aksi</th></tr>
-        {{#each rooms}}
-        <tr>
-            <td>{{this.id}}</td>
-            <td>{{this.name}}</td>
-            <td>{{this.capacity}}</td>
-            <td>
-                <a href="/rooms/detail/{{this.id}}">Detail</a> | 
-                <form action="/rooms/delete/{{this.id}}" method="POST" style="display:inline;">
-                    <button type="submit">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </table>
+    <div class="container">
+        <div class="page-header">
+            <h1>Manajemen Ruangan</h1>
+            <div class="nav-links">
+                <a href="/bookings" class="nav-primary">Pemesanan</a>
+                <a href="/login/logout" class="nav-danger">Logout</a>
+            </div>
+        </div>
+
+        <form action="/rooms" method="POST" class="add-form">
+            <input type="text" name="name" placeholder="Nama Ruangan" required autocomplete="off" />
+            <input type="number" name="capacity" placeholder="Kapasitas Ruangan" required />
+            <button type="submit" class="btn btn-primary">Tambah Ruangan</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">ID</th>
+                    <th width="40%">Nama Ruangan</th>
+                    <th width="20%">Kapasitas</th>
+                    <th width="30%">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each rooms}}
+                <tr>
+                    <td>#{{this.id}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.capacity}} Orang</td>
+                    <td class="action-cell">
+                        <a href="/rooms/detail/{{this.id}}" class="btn-outline">Detail</a>
+                        <form action="/rooms/delete/{{this.id}}" method="POST" onsubmit="return confirm('Yakin ingin menghapus ruangan ini? Semua data pemesanan di ruangan ini juga akan ikut terhapus permanen!');">
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

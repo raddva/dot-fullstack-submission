@@ -1,14 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Ruangan - {{room.name}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        .page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #1f2937;
+        }
+        .btn-outline {
+            text-decoration: none;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            background-color: #fff;
+        }
+        .btn-outline:hover { 
+            background-color: #f3f4f6; 
+        }
+        .info-section {
+            background-color: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .info-section strong { 
+            color: #475569; 
+        }
+        h3 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .booking-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .booking-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            background-color: #fff;
+            transition: border-color 0.3s;
+        }
+        .booking-list li:hover {
+            border-color: #3b82f6;
+        }
+        .booker-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: 15px;
+        }
+        .booking-date {
+            color: #6b7280;
+            font-size: 14px;
+            background-color: #f3f4f6;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 30px 20px;
+            background-color: #f9fafb;
+            border-radius: 6px;
+            border: 2px dashed #d1d5db;
+            font-size: 15px;
+        }
+    </style>
+</head>
 <body>
-    <h2>Detail Ruangan: {{room.name}}</h2>
-    <p>Kapasitas: {{room.capacity}} orang</p>
-    <h3>Daftar Pemesan:</h3>
-    <ul>
-        {{#each room.bookings}}
-            <li>{{this.bookerName}} - ({{this.bookingDate}})</li>
-        {{/each}}
-    </ul>
-    <a href="/rooms">Kembali</a>
+    <div class="container">
+        <div class="page-header">
+            <h1>Detail Ruangan: {{room.name}}</h1>
+            <a href="/rooms" class="btn-outline">Kembali</a>
+        </div>
+
+        <div class="info-section">
+            <p style="margin:0;"><strong>Kapasitas Maksimal:</strong> {{room.capacity}} Orang</p>
+        </div>
+
+        <h3>Daftar Pemesan:</h3>
+        <ul class="booking-list">
+            {{#each room.bookings}}
+            <li>
+                <span class="booker-name">{{this.bookerName}}</span>
+                <span class="booking-date">Tanggal: {{this.bookingDate}}</span>
+            </li>
+            {{else}}
+            <div class="empty-state">
+                Belum ada pemesanan untuk ruangan ini.
+            </div>
+            {{/each}}
+        </ul>
+    </div>
 </body>
 </html>

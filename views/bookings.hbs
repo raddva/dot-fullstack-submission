@@ -1,48 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pemesanan Ruangan</title>
-    <style>body { font-family: Arial; margin: 40px; } table { width: 60%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }</style>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        .page-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #1f2937;
+        }
+        .nav-links a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .nav-primary { background-color: #f3f4f6; color: #374151; }
+        .nav-primary:hover { background-color: #e5e7eb; }
+        .nav-danger { color: #dc2626; background-color: #fee2e2; }
+        .nav-danger:hover { background-color: #fecaca; }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        .add-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        input, select {
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+        .add-form input, .add-form select { flex: 1; }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary { background-color: #3b82f6; color: white; }
+        .btn-primary:hover { background-color: #2563eb; }
+        .btn-secondary { background-color: #6b7280; color: white; }
+        .btn-secondary:hover { background-color: #4b5563; }
+        .btn-danger { background-color: #ef4444; color: white; padding: 6px 12px; font-size: 12px;}
+        .btn-danger:hover { background-color: #dc2626; }
+        .btn-outline {
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 9px 15px;
+            background-color: #fff;
+        }
+        .btn-outline:hover { background-color: #f3f4f6; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #4b5563;
+        }
+        tr:hover { background-color: #f9fafb; }
+        .action-cell form { margin: 0; }
+        
+        .date-badge {
+            background-color: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+    </style>
 </head>
 <body>
-    <h1>Pemesanan Ruangan</h1>
-    <a href="/rooms">Ke Halaman Ruangan</a> | 
-    <a href="/login/logout" style="color: red;">Logout</a> <br><br>
-    
-    <form action="/bookings" method="GET">
-        <input type="text" name="search" value="{{search}}" placeholder="Cari nama pemesan..." />
-        <button type="submit">Cari</button>
-        <a href="/bookings">Reset</a>
-    </form>
-    <br>
+    <div class="container">
+        <div class="page-header">
+            <h1>Pemesanan Ruangan</h1>
+            <div class="nav-links">
+                <a href="/rooms" class="nav-primary">Manajemen Ruangan</a>
+                <a href="/login/logout" class="nav-danger">Logout</a>
+            </div>
+        </div>
 
-    <form action="/bookings" method="POST">
-        <input type="text" name="bookerName" placeholder="Nama Pemesan" required />
-        <input type="date" name="bookingDate" required />
-        <select name="roomId" required>
-            <option value="">-- Pilih Ruangan --</option>
-            {{#each rooms}}
-                <option value="{{this.id}}">{{this.name}} (Kap: {{this.capacity}})</option>
-            {{/each}}
-        </select>
-        <button type="submit">Booking</button>
-    </form>
-    <br>
-    <table>
-        <tr><th>ID</th><th>Nama Pemesan</th><th>Tanggal</th><th>Ruangan</th><th>Aksi</th></tr>
-        {{#each bookings}}
-        <tr>
-            <td>{{this.id}}</td>
-            <td>{{this.bookerName}}</td>
-            <td>{{this.bookingDate}}</td>
-            <td>{{this.room.name}}</td>
-            <td>
-                <form action="/bookings/delete/{{this.id}}" method="POST" style="display:inline;">
-                    <button type="submit">Batal</button>
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </table>
+        <div class="toolbar">
+            <h3 style="margin:0; font-size: 16px; color: #4b5563;">Daftar Transaksi</h3>
+            <form action="/bookings" method="GET" class="search-form">
+                <input type="text" name="search" value="{{search}}" placeholder="Cari nama pemesan..." autocomplete="off" />
+                <button type="submit" class="btn btn-secondary">Cari</button>
+                <a href="/bookings" class="btn btn-outline">Reset</a>
+            </form>
+        </div>
+
+        <form action="/bookings" method="POST" class="add-form">
+            <input type="text" name="bookerName" placeholder="Nama Pemesan" required autocomplete="off" />
+            <input type="date" name="bookingDate" required />
+            <select name="roomId" required>
+                <option value="">-- Pilih Ruangan --</option>
+                {{#each rooms}}
+                    <option value="{{this.id}}">{{this.name}} (Kap: {{this.capacity}})</option>
+                {{/each}}
+            </select>
+            <button type="submit" class="btn btn-primary">Booking</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">ID</th>
+                    <th width="25%">Nama Pemesan</th>
+                    <th width="20%">Tanggal</th>
+                    <th width="30%">Ruangan</th>
+                    <th width="15%">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each bookings}}
+                <tr>
+                    <td>#{{this.id}}</td>
+                    <td><strong>{{this.bookerName}}</strong></td>
+                    <td><span class="date-badge">{{this.bookingDate}}</span></td>
+                    <td>{{this.room.name}}</td>
+                    <td class="action-cell">
+                        <form action="/bookings/delete/{{this.id}}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pemesanan atas nama {{this.bookerName}}?');">
+                            <button type="submit" class="btn btn-danger">Batal</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
