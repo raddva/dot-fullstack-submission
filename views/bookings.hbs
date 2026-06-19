@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pemesanan Ruangan</title>
+    <style>body { font-family: Arial; margin: 40px; } table { width: 60%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }</style>
+</head>
+<body>
+    <h1>Pemesanan Ruangan</h1>
+    <a href="/rooms">Ke Halaman Ruangan</a> | 
+    <a href="/login/logout" style="color: red;">Logout</a> <br><br>
+    
+    <form action="/bookings" method="GET">
+        <input type="text" name="search" value="{{search}}" placeholder="Cari nama pemesan..." />
+        <button type="submit">Cari</button>
+        <a href="/bookings">Reset</a>
+    </form>
+    <br>
+
+    <form action="/bookings" method="POST">
+        <input type="text" name="bookerName" placeholder="Nama Pemesan" required />
+        <input type="date" name="bookingDate" required />
+        <select name="roomId" required>
+            <option value="">-- Pilih Ruangan --</option>
+            {{#each rooms}}
+                <option value="{{this.id}}">{{this.name}} (Kap: {{this.capacity}})</option>
+            {{/each}}
+        </select>
+        <button type="submit">Booking</button>
+    </form>
+    <br>
+    <table>
+        <tr><th>ID</th><th>Nama Pemesan</th><th>Tanggal</th><th>Ruangan</th><th>Aksi</th></tr>
+        {{#each bookings}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.bookerName}}</td>
+            <td>{{this.bookingDate}}</td>
+            <td>{{this.room.name}}</td>
+            <td>
+                <form action="/bookings/delete/{{this.id}}" method="POST" style="display:inline;">
+                    <button type="submit">Batal</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+</html>

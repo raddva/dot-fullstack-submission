@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manajemen Ruangan</title>
+    <style>body { font-family: Arial; margin: 40px; } table { width: 50%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }</style>
+</head>
+<body>
+    <h1>Manajemen Ruangan</h1>
+    <a href="/bookings">Ke Halaman Pemesanan</a> | 
+    <a href="/login/logout" style="color: red;">Logout</a> <br><br>
+    <form action="/rooms" method="POST">
+        <input type="text" name="name" placeholder="Nama Ruangan" required />
+        <input type="number" name="capacity" placeholder="Kapasitas" required />
+        <button type="submit">Tambah Ruangan</button>
+    </form>
+    <br>
+    <table>
+        <tr><th>ID</th><th>Nama Ruangan</th><th>Kapasitas</th><th>Aksi</th></tr>
+        {{#each rooms}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.capacity}}</td>
+            <td>
+                <a href="/rooms/detail/{{this.id}}">Detail</a> | 
+                <form action="/rooms/delete/{{this.id}}" method="POST" style="display:inline;">
+                    <button type="submit">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+</html>

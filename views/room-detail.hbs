@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Detail Ruangan: {{room.name}}</h2>
+    <p>Kapasitas: {{room.capacity}} orang</p>
+    <h3>Daftar Pemesan:</h3>
+    <ul>
+        {{#each room.bookings}}
+            <li>{{this.bookerName}} - ({{this.bookingDate}})</li>
+        {{/each}}
+    </ul>
+    <a href="/rooms">Kembali</a>
+</body>
+</html>
