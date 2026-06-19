@@ -10,6 +10,7 @@ import { RoomService } from './services/room.service';
 import { BookingService } from './services/booking.service';
 import { AuthController } from './controllers/auth.controller';
 import { AdminService } from './services/admin.service';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { AdminService } from './services/admin.service';
     }),
     TypeOrmModule.forFeature([Room, Booking, Admin]),
   ],
-  controllers: [RoomController, BookingController, AuthController],
+  controllers: [AppController, RoomController, BookingController, AuthController],
   providers: [RoomService, BookingService, AdminService],
 })
 export class AppModule {}

@@ -1,98 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Sistem Manajemen Pemesanan Ruangan (Admin Panel)
+## A. Penjelasan Project
+Aplikasi ini adalah sistem panel admin berbasis web yang dirancang untuk mengelola data pemesanan ruangan. Project ini dibangun menggunakan framework NestJS dengan bahasa pemrograman TypeScript. Berbeda dengan pendekatan REST API murni, aplikasi ini secara utuh menerapkan pola arsitektur MVC (Model-View-Controller) di mana sisi server langsung merender halaman HTML menggunakan template engine Handlebars (HBS).
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Fitur utama dalam aplikasi ini meliputi:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Autentikasi sesi (Login/Logout) menggunakan sistem Session dan perlindungan Guard.
+- Keamanan data sandi admin menggunakan algoritma hashing Bcrypt.
+- Operasi CRUD (Create, Read, Update, Delete) untuk data Ruangan dan Pemesanan.
+- Pencarian data pesanan berdasarkan nama pemesan.
+- Penanganan eror kustom yang dialihkan ke halaman antarmuka khusus (bukan respons JSON).
 
-## Description
+## B. Desain Database
+Basis data dikelola menggunakan PostgreSQL dan TypeORM. Terdapat tiga entitas utama dalam sistem ini:
+- Admins: Menyimpan kredensial pengguna untuk masuk ke dalam panel admin.
+- Rooms: Menyimpan informasi ruangan beserta kapasitasnya.
+- Bookings: Menyimpan detail pemesanan yang dilakukan.
+- Terdapat relasi One-to-Many antara tabel rooms dan bookings. Satu ruangan dapat memiliki banyak riwayat pemesanan. Ketika sebuah ruangan dihapus, semua data pemesanan yang terkait dengan ruangan tersebut akan ikut terhapus secara otomatis (Cascade Delete).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+![Desain Database]([])
 
-## Project setup
+## C. Dependency Utama
+Project ini bergantung pada beberapa pustaka utama, antara lain:
 
-```bash
-$ npm install
-```
+@nestjs/core & @nestjs/common (Core Foundations framework)
+typeorm & @nestjs/typeorm (ORM dan migrasi database)
+pg (Driver connect PostgreSQL)
+hbs (tampilan web)
+express-session (Pengelolaan session)
+bcrypt (enkripsi password)
 
-## Compile and run the project
+## D. Panduan untuk Developer Selanjutnya
+Bagian ini berisi instruksi dan informasi penting bagi developer yang ingin melanjutkan atau memelihara project ini.
 
-```bash
-# development
-$ npm run start
+1. Instalasi dan Persiapan Menjalankan Project
+Lakukan clone pada repositori ini.
 
-# watch mode
-$ npm run start:dev
+Buka terminal di direktori project dan jalankan perintah npm install untuk mengunduh semua package yang dibutuhkan.
 
-# production mode
-$ npm run start:prod
-```
+Buat database kosong di PostgreSQL (misalnya dengan nama booking_db).
 
-## Run tests
+Salin file .env.example menjadi file baru bernama .env. Sesuaikan isian host, port, username, password, dan nama database dengan pengaturan PostgreSQL di komputer Anda. Pastikan juga Anda mengisi SESSION_SECRET dengan kalimat acak untuk keamanan sesi.
 
-```bash
-# unit tests
-$ npm run test
+2. Migrasi Database
+Project ini tidak menggunakan sinkronisasi skema database otomatis demi keamanan. Untuk membentuk tabel di dalam database, jalankan perintah migrasi berikut:
+npm run migration:run
 
-# e2e tests
-$ npm run test:e2e
+Untuk menambahkan akun admin pertama kali, lakukan insert data langsung ke tabel admins melalui perangkat lunak manajemen database (seperti pgAdmin). Penting untuk diingat: kata sandi harus dienkripsi menjadi teks hash (menggunakan Bcrypt Generator standar dengan 10 rounds) sebelum dimasukkan ke dalam basis data.
 
-# test coverage
-$ npm run test:cov
-```
+3. Memulai Aplikasi
+Jalankan server aplikasi di lingkungan pengembangan menggunakan perintah:
+npm run start:dev
+Aplikasi dapat diakses melalui browser pada alamat `http://localhost:3000`. Akses ke jalur utama ini akan secara otomatis mengarahkan pengguna ke halaman login jika sesi belum terdaftar.
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+4. Struktur Kode MVC dan Penanganan Eror
+- Model: Seluruh skema tabel diatur di dalam folder src/entities. Logika interaksi database dikelola di folder src/services.
+- View: Berkas tampilan yang menggunakan ekstensi .hbs terletak di luar direktori sumber, tepatnya di dalam folder views pada root project.
+- Controller: Pengatur lalu lintas rute HTTP dan pengembalian render halaman terdapat di folder src/controllers.
+- Eror Handling: Aplikasi ini menggunakan filter eksepsi global (src/filters/http-exception.filter.ts) yang menangkap eror tingkat HTTP (seperti 404 atau 500) dan mencetaknya ke dalam tampilan HTML (views/error.hbs), sehingga pengguna tidak akan pernah melihat respons eror berupa teks JSON mentah.

@@ -1,31 +1,23 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from '../entities/admin.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class AdminService implements OnModuleInit {
+export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
   ) {}
 
-  async onModuleInit() {
-    const adminCount = await this.adminRepository.count();
-    if (adminCount === 0) {
-      const defaultAdmin = this.adminRepository.create({
-        username: 'admin',
-        password: 'admin123',
-      });
-      await this.adminRepository.save(defaultAdmin);
-      console.log('Default admin created: admin / admin123');
-    }
-  }
-
-  async validateAdmin(username: string, password: string): Promise<boolean> {
+  async validateAdmin(username: string, password_input: string): Promise<boolean> {
     const admin = await this.adminRepository.findOne({ where: { username } });
-    if (admin && admin.password === password) {
-      return true;
+    if (admin) {
+      const isMatch = await bcrypt.compare(password_input, admin.password);
+      if (isMatch) {
+        return true;
+      }
     }
     return false;
   }
