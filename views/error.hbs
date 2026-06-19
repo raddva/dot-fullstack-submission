@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terjadi Kesalahan - {{statusCode}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            color: #333;
+        }
+        .error-card {
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .error-code {
+            font-size: 80px;
+            font-weight: 700;
+            color: #ef4444;
+            margin: 0;
+            line-height: 1;
+        }
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .error-message {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <h1 class="error-code">{{statusCode}}</h1>
+        <div class="error-title">Oops! Ada yang salah.</div>
+        <div class="error-message">
+            Pesan Sistem: <strong>{{message}}</strong><br><br>
+            Halaman yang Anda cari mungkin tidak tersedia atau terjadi kesalahan pada server.
+        </div>
+        <a href="/rooms" class="btn-back">Kembali ke Beranda</a>
+    </div>
+</body>
+</html>

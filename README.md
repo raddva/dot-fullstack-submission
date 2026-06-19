@@ -2,22 +2,21 @@
 ## A. Penjelasan Project
 > Aplikasi ini adalah sistem panel admin berbasis web yang dirancang untuk mengelola data pemesanan ruangan. Project ini dibangun menggunakan framework NestJS dengan bahasa pemrograman TypeScript. Berbeda dengan pendekatan REST API murni, aplikasi ini secara utuh menerapkan pola arsitektur MVC (Model-View-Controller) di mana sisi server langsung merender halaman HTML menggunakan template engine Handlebars (HBS).
 
-Fitur utama dalam aplikasi ini meliputi:
-
+Fitur utama:
 - Autentikasi sesi (Login/Logout) menggunakan sistem Session dan perlindungan Guard.
 - Keamanan data sandi admin menggunakan algoritma hashing Bcrypt.
 - Operasi CRUD (Create, Read, Update, Delete) untuk data Ruangan dan Pemesanan.
 - Pencarian data pesanan berdasarkan nama pemesan.
 - Penanganan eror kustom yang dialihkan ke halaman antarmuka khusus (bukan respons JSON).
 
-## B. Desain Database
-Basis data dikelola menggunakan PostgreSQL dan TypeORM. Terdapat tiga entitas utama dalam sistem ini:
+## B. Database
+Data dikelola menggunakan PostgreSQL dan TypeORM. Terdapat tiga entitas utama dalam sistem ini:
 - Admins: Menyimpan kredensial pengguna untuk masuk ke dalam panel admin.
 - Rooms: Menyimpan informasi ruangan beserta kapasitasnya.
 - Bookings: Menyimpan detail pemesanan yang dilakukan.
 - Terdapat relasi One-to-Many antara tabel rooms dan bookings. Satu ruangan dapat memiliki banyak riwayat pemesanan. Ketika sebuah ruangan dihapus, semua data pemesanan yang terkait dengan ruangan tersebut akan ikut terhapus secara otomatis (Cascade Delete).
 
-![Desain Database](https://dbdiagram.io/d/Bookings-69cc774cfb2db18e3b501624)
+[DBDIAGRAM](https://dbdiagram.io/d/Bookings-69cc774cfb2db18e3b501624)
 
 ## C. Dependency Utama
 Project ini bergantung pada beberapa pustaka utama, antara lain:

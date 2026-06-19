@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { Booking } from '../entities/booking.entity';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class BookingService {
   findAll(search?: string) {
     if (search) {
       return this.bookingRepository.find({
-        where: { bookerName: Like(`%${search}%`) },
+        where: { bookerName: ILike(`%${search}%`) },
         relations: ['room'],
       });
     }
