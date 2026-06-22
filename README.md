@@ -1,38 +1,38 @@
 # Sistem Manajemen Pemesanan Ruangan (Admin Panel)
-## A. Penjelasan Project
-> Aplikasi ini adalah sistem panel admin berbasis web yang dirancang untuk mengelola data pemesanan ruangan. Project ini dibangun menggunakan framework NestJS dengan bahasa pemrograman TypeScript. Berbeda dengan pendekatan REST API murni, aplikasi ini secara utuh menerapkan pola arsitektur MVC (Model-View-Controller) di mana sisi server langsung merender halaman HTML menggunakan template engine Handlebars (HBS).
+## A. Project Overview
+> Aplikasi ini merupakan admin panel berbasis web untuk manajemen pemesanan ruangan. Dibangun menggunakan framework **NestJS (TypeScript)**, project ini tidak menggunakan pendekatan pure REST API, melainkan mengadopsi arsitektur **MVC (Model-View-Controller)** di mana server-side rendering (SSR) langsung ditangani menggunakan template engine **Handlebars (HBS)**.
 
-Fitur utama:
-- Autentikasi sesi (Login/Logout) menggunakan sistem Session dan perlindungan Guard.
-- Keamanan data sandi admin menggunakan algoritma hashing Bcrypt.
-- Operasi CRUD (Create, Read, Update, Delete) untuk data Ruangan dan Pemesanan.
-- Pencarian data pesanan berdasarkan nama pemesan.
-- Penanganan eror kustom yang dialihkan ke halaman antarmuka khusus (bukan respons JSON).
+Key Features:
+- Session-based Authentication: Alur Login/Logout yang dilindungi menggunakan NestJS Guards.
+- Password Hashing: Menggunakan Bcrypt untuk enkripsi dan keamanan kredensial admin.
+- CRUD Operations: Manajemen data Ruangan (Rooms) dan Pemesanan (Bookings).
+- Search Functionality: Pencarian data booking berdasarkan nama pemesan.
+- Custom Error Handling: Mengalihkan HTTP exception ke halaman view khusus, sehingga user tidak melihat raw JSON error.
 
 ## B. Database
-Data dikelola menggunakan PostgreSQL dan TypeORM. Terdapat tiga entitas utama dalam sistem ini:
-- Admins: Menyimpan kredensial pengguna untuk masuk ke dalam panel admin.
-- Rooms: Menyimpan informasi ruangan beserta kapasitasnya.
-- Bookings: Menyimpan detail pemesanan yang dilakukan.
-- Terdapat relasi One-to-Many antara tabel rooms dan bookings. Satu ruangan dapat memiliki banyak riwayat pemesanan. Ketika sebuah ruangan dihapus, semua data pemesanan yang terkait dengan ruangan tersebut akan ikut terhapus secara otomatis (Cascade Delete).
+Database dikelola menggunakan PostgreSQL dan TypeORM. Terdapat tiga entity utama di dalam sistem:
+- admins: Menyimpan kredensial user untuk akses ke admin panel.
+- rooms: Menyimpan data ruangan beserta kapasitasnya.
+- bookings: Menyimpan detail riwayat booking.
+- Relasi: Terdapat relasi One-to-Many antara tabel rooms dan bookings. Satu ruangan bisa memiliki banyak booking. Jika sebuah ruangan dihapus, seluruh data booking yang memiliki relasi dengan ruangan tersebut akan ikut terhapus otomatis (Cascade Delete).
 
-[DBDIAGRAM](https://dbdiagram.io/d/Bookings-69cc774cfb2db18e3b501624)
+Ref: [DBDIAGRAM](https://dbdiagram.io/d/Bookings-69cc774cfb2db18e3b501624)
 
-## C. Dependency Utama
+## C. Tech Stack & Dependencies
 Project ini bergantung pada beberapa pustaka utama, antara lain:
 
-- @nestjs/core & @nestjs/common (Core Foundations framework)
+- @nestjs/core & @nestjs/common (Core framework)
 - typeorm & @nestjs/typeorm (ORM dan migrasi database)
 - pg (Driver connect PostgreSQL)
-- hbs (tampilan web)
-- express-session (Pengelolaan session)
-- bcrypt (enkripsi password)
+- hbs (Handlebars template engine untuk views)
+- express-session (Session management)
+- bcrypt (encrypt password)
 
-## D. Panduan untuk Developer Selanjutnya
-Bagian ini berisi instruksi dan informasi penting bagi developer yang ingin melanjutkan atau memelihara project ini.
+## D. Developer Guide
+Instruksi berikut ditujukan untuk proses setup, instalasi, dan pemeliharaan project.
 
 1. Instalasi dan Persiapan Menjalankan Project
-- Lakukan clone pada repositori ini.
+- Clone repositori ini.
 - Buka terminal di direktori project dan jalankan perintah npm install untuk mengunduh semua package yang dibutuhkan.
 - Buat database kosong di PostgreSQL (misalnya dengan nama booking_db).
 - Salin file .env.example menjadi file baru bernama .env. Sesuaikan isian host, port, username, password, dan nama database dengan pengaturan PostgreSQL di komputer Anda. Pastikan juga Anda mengisi SESSION_SECRET dengan kalimat acak untuk keamanan sesi.
@@ -41,12 +41,12 @@ Bagian ini berisi instruksi dan informasi penting bagi developer yang ingin mela
 - Project ini tidak menggunakan sinkronisasi skema database otomatis demi keamanan. Untuk membentuk tabel di dalam database, jalankan perintah migrasi berikut: `npm run migration:run`
 - Untuk menambahkan akun admin pertama kali, lakukan insert data langsung ke tabel admins melalui perangkat lunak manajemen database (seperti pgAdmin). Penting untuk diingat: kata sandi harus dienkripsi menjadi teks hash (menggunakan Bcrypt Generator standar dengan 10 rounds) sebelum dimasukkan ke dalam basis data.
 
-3. Memulai Aplikasi
-- Jalankan server aplikasi di lingkungan pengembangan menggunakan perintah: `npm run start:dev`
-- Aplikasi dapat diakses melalui browser pada alamat `http://localhost:3000`. Akses ke jalur utama ini akan secara otomatis mengarahkan pengguna ke halaman login jika sesi belum terdaftar.
+3. Running the App
+- Start development server: `npm run start:dev`
+- Buka `http://localhost:3000` di browser. Unauthenticated users akan otomatis di-redirect ke halaman login.
 
 4. Struktur Kode MVC dan Penanganan Eror
-- Model: Seluruh skema tabel diatur di dalam folder src/entities. Logika interaksi database dikelola di folder src/services.
-- View: Berkas tampilan yang menggunakan ekstensi .hbs terletak di luar direktori sumber, tepatnya di dalam folder views pada root project.
-- Controller: Pengatur lalu lintas rute HTTP dan pengembalian render halaman terdapat di folder src/controllers.
-- Eror Handling: Aplikasi ini menggunakan filter eksepsi global (src/filters/http-exception.filter.ts) yang menangkap eror tingkat HTTP (seperti 404 atau 500) dan mencetaknya ke dalam tampilan HTML (views/error.hbs), sehingga pengguna tidak akan pernah melihat respons eror berupa teks JSON mentah.
+- Models: Skema definisi database (Entities) berada di folder `src/entities/`, sedangkan business logic dikelola di `src/services/`.
+- Views: Berkas tampilan `.hbs` diletakkan di luar direktori `src`, tepatnya di folder `views/` pada root project.
+- Controllers: Routing HTTP dan rendering view ditangani oleh folders di dalam `src/controllers/`.
+- Error Handling: Menggunakan Global Exception Filter (`src/filters/http-exception.filter.ts`). Filter ini bertugas menangkap HTTP exceptions (seperti `404 Not Found` atau `500 Internal Server Error`) dan me-render-nya ke `views/error.hbs`. Tujuannya agar aplikasi tidak pernah me-return JSON exception ke end-user.
